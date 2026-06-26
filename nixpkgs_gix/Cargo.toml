@@ -1,0 +1,23 @@
+[package]
+name = "nixpkgs_gix"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "nixpkgs_gix"
+crate-type = ["cdylib"]
+
+[package.metadata.maturin]
+auditwheel = false
+
+[dependencies]
+gix = { version = "0.78.0", features = [
+    "blocking-network-client",
+    "blocking-http-transport-reqwest",
+    "blocking-http-transport-reqwest-rust-tls",
+] }
+pyo3 = { version = "0.25", features = ["extension-module"] }
+bstr = "1"
+
+[profile.release]
+lto = true
