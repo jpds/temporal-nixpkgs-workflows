@@ -1,0 +1,35 @@
+[workspace]
+resolver = "3"
+
+[patch.crates-io]
+hyper          = { git = "https://github.com/flokli/hyper.git",      rev = "554050c2ac5057110dc76a71022d7f6a7a8c9e2e" }
+tonic          = { git = "https://github.com/flokli/grpc-rust.git",   rev = "292ed1a6aa8011208f685e9e116ea205d3156256" }
+tonic-prost        = { git = "https://github.com/flokli/grpc-rust.git",   rev = "292ed1a6aa8011208f685e9e116ea205d3156256" }
+tonic-prost-build  = { git = "https://github.com/flokli/grpc-rust.git",   rev = "292ed1a6aa8011208f685e9e116ea205d3156256" }
+
+[package]
+name    = "nixpkgs_snix"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name       = "nixpkgs_snix"
+crate-type = ["cdylib"]
+
+[package.metadata.maturin]
+auditwheel = false
+
+[dependencies]
+pyo3       = { version = "0.25", features = ["extension-module"] }
+tokio      = { version = "1",    features = ["rt", "rt-multi-thread"] }
+clap       = { version = "4", features = ["derive"] }
+bstr       = "1"
+blake3     = "=1.8.2"
+
+snix-eval  = { git = "https://git.snix.dev/snix/snix", rev = "6726192635c063576a50374134a0fe334b17b334" }
+snix-glue  = { git = "https://git.snix.dev/snix/snix", rev = "6726192635c063576a50374134a0fe334b17b334", default-features = false }
+snix-store = { git = "https://git.snix.dev/snix/snix", rev = "6726192635c063576a50374134a0fe334b17b334", default-features = false }
+snix-build = { git = "https://git.snix.dev/snix/snix", rev = "6726192635c063576a50374134a0fe334b17b334", default-features = false }
+
+[profile.release]
+lto = true
