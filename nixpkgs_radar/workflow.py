@@ -44,14 +44,15 @@ _BRANCHES = (
     ("unstable", "refs/remotes/origin/nixpkgs-unstable"),
 )
 
-_SYSTEM_PROMPT = """
+def _build_system_prompt(latest_release: str) -> str:
+    return f"""
 You are a NixOS package maintenance assistant helping a nixpkgs maintainer
 review the packages they maintain.
 
 For each package you are given the version found in four places:
   - nixpkgs master   : the development branch
   - nixpkgs unstable : the rolling release
-  - release-YY.MM    : the current stable release branch
+  - {latest_release:<17}: the current stable release branch
   - upstream latest  : the newest release published by the project
 "unknown" means the data was unavailable: never treat it as out of date,
 and never invent a version. Compare only the numbers you are given.
@@ -224,7 +225,7 @@ class NixpkgsRadarWorkflow:
 
         agent = Agent(
             name="nixpkgs Release Radar Assistant",
-            instructions=_SYSTEM_PROMPT,
+            instructions=_build_system_prompt(latest_release),
             model=_MODEL,
         )
         result = await Runner.run(
